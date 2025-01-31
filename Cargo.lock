@@ -353,7 +353,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deepclaude"
+name = "deepclaudeadvanced"
 version = "0.1.0"
 dependencies = [
  "anyhow",

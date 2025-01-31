@@ -186,8 +186,8 @@ impl IntoResponse for ApiError {
 /// return `anyhow::Error`, converting them into our custom `ApiError` type.
 impl From<anyhow::Error> for ApiError {
     fn from(err: anyhow::Error) -> Self {
-        ApiError::Other { 
-            message: err.to_string() 
+        ApiError::Other {
+            message: err.to_string()
         }
     }
 }
