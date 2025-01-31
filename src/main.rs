@@ -70,7 +70,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Build router
     let app = Router::new()
-        .route("/", post(handlers::handle_chat))
+        .route("/chat/completions", post(handlers::handle_chat))
         .layer(TraceLayer::new_for_http())
         .layer(cors)
         .with_state(state);
