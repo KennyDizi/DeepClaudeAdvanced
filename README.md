@@ -2,7 +2,7 @@
 
 <h1>DeepClaude 🐬🧠</h1>
 
-<img src="frontend/public/deepclaude.png" width="300">
+<img src="assets/deepclaude.png" width="300">
 
 Harness the power of DeepSeek R1's reasoning and Claude's creativity and code generation capabilities with a unified API and chat interface.
 
@@ -69,7 +69,7 @@ However, R1 lacks in code generation, creativity, and conversational skills. Cla
 
 ## Benchmarks
 
-![Benchmarks](frontend/public/r1-plus-sonnet-benchmarks.png)
+![Benchmarks](assets/r1-plus-sonnet-benchmarks.png)
 
 According to [Aider Polyglot Benchmarks](https://aider.chat/2025/01/24/r1-sonnet.html), the combination of "R1 as architect with Sonnet as editor" has achieved:
 
