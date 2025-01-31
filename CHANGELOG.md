@@ -1,4 +1,4 @@
-## [2025-01-31] [PR#KennyDizi/DCA/7](https://github.com/KennyDizi/DCA/pull/7)
+## [2025-01-31] [PR#7](https://github.com/KennyDizi/DCA/pull/7)
 
 ### Changed
 - Renamed package from `deepclaudeadvanced` to `deepclaude` in `Cargo.toml`.
