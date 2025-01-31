@@ -197,24 +197,24 @@ impl DeepSeekClient {
             "Authorization",
             format!("Bearer {}", self.api_token)
                 .parse()
-                .map_err(|e| ApiError::Internal { 
-                    message: format!("Invalid API token: {}", e) 
+                .map_err(|e| ApiError::Internal {
+                    message: format!("Invalid API token: {}", e)
                 })?,
         );
         headers.insert(
             "Content-Type",
             "application/json"
                 .parse()
-                .map_err(|e| ApiError::Internal { 
-                    message: format!("Invalid content type: {}", e) 
+                .map_err(|e| ApiError::Internal {
+                    message: format!("Invalid content type: {}", e)
                 })?,
         );
         headers.insert(
             "Accept",
             "application/json"
                 .parse()
-                .map_err(|e| ApiError::Internal { 
-                    message: format!("Invalid accept header: {}", e) 
+                .map_err(|e| ApiError::Internal {
+                    message: format!("Invalid accept header: {}", e)
                 })?,
         );
 
@@ -256,7 +256,7 @@ impl DeepSeekClient {
                 // Remove protected fields from config body
                 body.remove("stream");
                 body.remove("messages");
-                
+
                 // Merge remaining fields from config.body
                 for (key, value) in body {
                     map.insert(key, value);
@@ -305,7 +305,7 @@ impl DeepSeekClient {
             .json(&request)
             .send()
             .await
-            .map_err(|e| ApiError::DeepSeekError { 
+            .map_err(|e| ApiError::DeepSeekError {
                 message: format!("Request failed: {}", e),
                 type_: "request_failed".to_string(),
                 param: None,
@@ -317,7 +317,7 @@ impl DeepSeekClient {
                 .text()
                 .await
                 .unwrap_or_else(|_| "Unknown error".to_string());
-            return Err(ApiError::DeepSeekError { 
+            return Err(ApiError::DeepSeekError {
                 message: error,
                 type_: "api_error".to_string(),
                 param: None,
@@ -328,7 +328,7 @@ impl DeepSeekClient {
         response
             .json::<DeepSeekResponse>()
             .await
-            .map_err(|e| ApiError::DeepSeekError { 
+            .map_err(|e| ApiError::DeepSeekError {
                 message: format!("Failed to parse response: {}", e),
                 type_: "parse_error".to_string(),
                 param: None,
@@ -384,7 +384,7 @@ impl DeepSeekClient {
                 .bytes_stream();
 
             let mut data = String::new();
-            
+
             while let Some(chunk) = stream.next().await {
                 let chunk = chunk.map_err(|e| ApiError::DeepSeekError { 
                     message: format!("Stream error: {}", e),
@@ -399,7 +399,7 @@ impl DeepSeekClient {
                     let end = start + end;
                     let line = &data[start..end].trim();
                     start = end + 2;
-                    
+
                     if line.starts_with("data: ") {
                         let json_data = &line["data: ".len()..];
                         if let Ok(response) = serde_json::from_str::<StreamResponse>(json_data) {

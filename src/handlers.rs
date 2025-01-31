@@ -97,7 +97,7 @@ fn calculate_deepseek_cost(
     let cache_hit_cost = (cached_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.input_cache_hit_price;
     let cache_miss_cost = ((input_tokens - cached_tokens) as f64 / 1_000_000.0) * config.pricing.deepseek.input_cache_miss_price;
     let output_cost = (output_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.output_price;
-    
+
     cache_hit_cost + cache_miss_cost + output_cost
 }
 
@@ -218,7 +218,7 @@ pub(crate) async fn chat(
 
     // Call DeepSeek API
     let deepseek_response = deepseek_client.chat(messages.clone(), &request.deepseek_config).await?;
-    
+
     // Store response metadata
     let deepseek_status: u16 = 200;
     let deepseek_headers = HashMap::new(); // Headers not available when using high-level chat method
@@ -250,7 +250,7 @@ pub(crate) async fn chat(
         request.get_system_prompt().map(String::from),
         &request.anthropic_config
     ).await?;
-    
+
     // Store response metadata
     let anthropic_status: u16 = 200;
     let anthropic_headers = HashMap::new(); // Headers not available when using high-level chat method
@@ -275,10 +275,10 @@ pub(crate) async fn chat(
 
     // Combine thinking content with Anthropic's response
     let mut content = Vec::new();
-    
+
     // Add thinking block first
     content.push(ContentBlock::text(thinking_content));
-    
+
     // Add Anthropic's response blocks
     content.extend(anthropic_response.content.clone().into_iter()
         .map(ContentBlock::from_anthropic));
@@ -392,7 +392,7 @@ pub(crate) async fn chat_stream(
         let mut deepseek_usage = None;
         let mut complete_reasoning = String::new();
         let mut deepseek_stream = deepseek_client.chat_stream(messages.clone(), &request_clone.deepseek_config);
-        
+
         while let Some(chunk) = deepseek_stream.next().await {
             match chunk {
                 Ok(response) => {
@@ -417,13 +417,13 @@ pub(crate) async fn chat_stream(
                                         .unwrap_or_default(),
                                     )))
                                     .await;
-                                
+
                                 // Accumulate complete reasoning for later use
                                 complete_reasoning.push_str(reasoning);
                             }
                         }
                     }
-                    
+
                     // Store usage information if present
                     if let Some(usage) = response.usage {
                         deepseek_usage = Some(usage);
@@ -525,7 +525,7 @@ pub(crate) async fn chat_stream(
                                     usage.prompt_tokens_details.cached_tokens,
                                     &config,
                                 );
-                                
+
                                 (DeepSeekUsage {
                                     input_tokens: usage.prompt_tokens,
                                     output_tokens: usage.completion_tokens,
