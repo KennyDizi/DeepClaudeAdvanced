@@ -51,25 +51,29 @@ fn extract_api_tokens(
 ) -> Result<(String, String)> {
     let deepseek_token = headers
         .get("X-DeepSeek-API-Token")
-        .ok_or_else(|| ApiError::MissingHeader { 
-            header: "X-DeepSeek-API-Token".to_string() 
+        .map(|hv| hv.to_str().map(|s| s.to_string()))
+        .transpose()
+        .map_err(|_| ApiError::BadRequest {
+            message: "Invalid DeepSeek API token".to_string()
         })?
-        .to_str()
-        .map_err(|_| ApiError::BadRequest { 
-            message: "Invalid DeepSeek API token".to_string() 
-        })?
-        .to_string();
+        .or_else(|| std::env::var("DEEPSEEK_API_KEY").ok())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| ApiError::MissingHeader {
+            header: "X-DeepSeek-API-Token".to_string()
+        })?;
 
     let anthropic_token = headers
         .get("X-Anthropic-API-Token")
-        .ok_or_else(|| ApiError::MissingHeader { 
-            header: "X-Anthropic-API-Token".to_string() 
+        .map(|hv| hv.to_str().map(|s| s.to_string()))
+        .transpose()
+        .map_err(|_| ApiError::BadRequest {
+            message: "Invalid Anthropic API token".to_string()
         })?
-        .to_str()
-        .map_err(|_| ApiError::BadRequest { 
-            message: "Invalid Anthropic API token".to_string() 
-        })?
-        .to_string();
+        .or_else(|| std::env::var("ANTHROPIC_API_KEY").ok())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| ApiError::MissingHeader {
+            header: "X-Anthropic-API-Token".to_string()
+        })?;
 
     Ok((deepseek_token, anthropic_token))
 }
@@ -228,7 +232,7 @@ pub(crate) async fn chat(
         .choices
         .first()
         .and_then(|c| c.message.reasoning_content.as_ref())
-        .ok_or_else(|| ApiError::DeepSeekError { 
+        .ok_or_else(|| ApiError::DeepSeekError {
             message: "No reasoning content in response".to_string(),
             type_: "missing_content".to_string(),
             param: None,
@@ -479,7 +483,7 @@ pub(crate) async fn chat_stream(
                         if !message.content.is_empty() {
                             let _ = tx
                                 .send(Ok(Event::default().event("content").data(
-                                    serde_json::to_string(&StreamEvent::Content { 
+                                    serde_json::to_string(&StreamEvent::Content {
                                         content: message.content.into_iter()
                                             .map(ContentBlock::from_anthropic)
                                             .collect()
