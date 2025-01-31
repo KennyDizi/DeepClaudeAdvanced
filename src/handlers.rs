@@ -51,14 +51,16 @@ fn extract_api_tokens(
 ) -> Result<(String, String)> {
     let deepseek_token = headers
         .get("X-DeepSeek-API-Token")
-        .ok_or_else(|| ApiError::MissingHeader {
-            header: "X-DeepSeek-API-Token".to_string()
-        })?
-        .to_str()
+        .map(|hv| hv.to_str().map(|s| s.to_string()))
+        .transpose()
         .map_err(|_| ApiError::BadRequest {
             message: "Invalid DeepSeek API token".to_string()
         })?
-        .to_string();
+        .or_else(|| std::env::var("DEEPSEEK_API_KEY").ok())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| ApiError::MissingHeader {
+            header: "X-DeepSeek-API-Token".to_string()
+        })?;
 
     let anthropic_token = headers
         .get("X-Anthropic-API-Token")
