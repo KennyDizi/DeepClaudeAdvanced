@@ -64,14 +64,16 @@ fn extract_api_tokens(
 
     let anthropic_token = headers
         .get("X-Anthropic-API-Token")
-        .ok_or_else(|| ApiError::MissingHeader {
-            header: "X-Anthropic-API-Token".to_string()
-        })?
-        .to_str()
+        .map(|hv| hv.to_str().map(|s| s.to_string()))
+        .transpose()
         .map_err(|_| ApiError::BadRequest {
             message: "Invalid Anthropic API token".to_string()
         })?
-        .to_string();
+        .or_else(|| std::env::var("ANTHROPIC_API_KEY").ok())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| ApiError::MissingHeader {
+            header: "X-Anthropic-API-Token".to_string()
+        })?;
 
     Ok((deepseek_token, anthropic_token))
 }
