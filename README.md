@@ -121,7 +121,7 @@ See [API Docs](https://deepclaude.chat)
 import requests
 
 response = requests.post(
-    "http://127.0.0.1:1337/",
+    "http://127.0.0.1:1337/chat/completions",
     headers={
         "X-DeepSeek-API-Token": "<YOUR_DEEPSEEK_API_KEY>",
         "X-Anthropic-API-Token": "<YOUR_ANTHROPIC_API_KEY>"
@@ -147,7 +147,7 @@ async def stream_response():
     async with httpx.AsyncClient() as client:
         async with client.stream(
             "POST",
-            "http://127.0.0.1:1337/",
+            "http://127.0.0.1:1337/chat/completions",
             headers={
                 "X-DeepSeek-API-Token": "<YOUR_DEEPSEEK_API_KEY>",
                 "X-Anthropic-API-Token": "<YOUR_ANTHROPIC_API_KEY>"
