@@ -1,16 +1,10 @@
 # Server Configuration
 [server]
 host = "127.0.0.1"
-port = 1337
+port = 11434
 
 # Pricing Configuration (per million tokens)
 [pricing]
-[pricing.deepseek]
-[pricing.deepseek.deepseek_chat]
-input_cache_hit_price = 0.014
-input_cache_miss_price = 0.14
-output_price = 0.28
-
 [pricing.deepseek.deepseek_reasoner]
 input_cache_hit_price = 0.14
 input_cache_miss_price = 0.55
