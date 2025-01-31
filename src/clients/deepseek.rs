@@ -375,7 +375,7 @@ impl DeepSeekClient {
                 .json(&request)
                 .send()
                 .await
-                .map_err(|e| ApiError::DeepSeekError { 
+                .map_err(|e| ApiError::DeepSeekError {
                     message: format!("Request failed: {}", e),
                     type_: "request_failed".to_string(),
                     param: None,
@@ -386,7 +386,7 @@ impl DeepSeekClient {
             let mut data = String::new();
 
             while let Some(chunk) = stream.next().await {
-                let chunk = chunk.map_err(|e| ApiError::DeepSeekError { 
+                let chunk = chunk.map_err(|e| ApiError::DeepSeekError {
                     message: format!("Stream error: {}", e),
                     type_: "stream_error".to_string(),
                     param: None,

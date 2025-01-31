@@ -1,5 +1,5 @@
 [package]
-name = "deepclaudeadvanced"
+name = "deepclaude"
 version = "0.1.1"
 edition = "2021"
 description = "A high-performance LLM inference API that integrates DeepSeek R1's CoT reasoning traces with Anthropic Claude models."
