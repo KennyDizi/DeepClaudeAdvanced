@@ -38,20 +38,20 @@ use std::collections::HashMap;
 /// - A header value contains invalid characters
 pub(crate) fn build_headers(headers: &HashMap<String, String>) -> Result<HeaderMap> {
     let mut header_map = HeaderMap::new();
-    
+
     for (key, value) in headers {
         let header_name = HeaderName::from_bytes(key.as_bytes())
-            .map_err(|e| crate::error::ApiError::BadRequest { 
-                message: format!("Invalid header name: {}", e) 
+            .map_err(|e| crate::error::ApiError::BadRequest {
+                message: format!("Invalid header name: {}", e)
             })?;
-            
+
         let header_value = HeaderValue::from_str(value)
-            .map_err(|e| crate::error::ApiError::BadRequest { 
-                message: format!("Invalid header value: {}", e) 
+            .map_err(|e| crate::error::ApiError::BadRequest {
+                message: format!("Invalid header value: {}", e)
             })?;
-            
+
         header_map.insert(header_name, header_value);
     }
-    
+
     Ok(header_map)
 }
