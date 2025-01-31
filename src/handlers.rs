@@ -58,8 +58,9 @@ fn extract_api_tokens(
         })?
         .or_else(|| std::env::var("DEEPSEEK_API_KEY").ok())
         .filter(|s| !s.is_empty())
-        .ok_or_else(|| ApiError::MissingHeader {
-            header: "X-DeepSeek-API-Token".to_string()
+        .ok_or_else(|| ApiError::InvalidToken {
+            message: "DeepSeek API token cannot be empty.".to_string(),
+            token_type: "X-DeepSeek-API-Token".to_string()
         })?;
 
     let anthropic_token = headers
@@ -71,8 +72,9 @@ fn extract_api_tokens(
         })?
         .or_else(|| std::env::var("ANTHROPIC_API_KEY").ok())
         .filter(|s| !s.is_empty())
-        .ok_or_else(|| ApiError::MissingHeader {
-            header: "X-Anthropic-API-Token".to_string()
+        .ok_or_else(|| ApiError::InvalidToken {
+            message: "Anthropic Claude API token cannot be empty.".to_string(),
+            token_type: "X-Anthropic-API-Token".to_string()
         })?;
 
     Ok((deepseek_token, anthropic_token))
