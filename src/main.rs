@@ -70,16 +70,23 @@ async fn main() -> anyhow::Result<()> {
 
     // Build router
     let app = Router::new()
-        .route("/hello", get(hello_handler))
+        .route("/health", get(health_handler))
         .route("/chat/completions", post(handlers::handle_chat))
         .layer(TraceLayer::new_for_http())
         .layer(cors)
         .with_state(state);
 
     // Get host and port from config
-    let addr: SocketAddr = format!("{}:{}", config.server.host, config.server.port)
+    let host = config.server.host.clone();
+    let port = config.server.port;
+    let addr: SocketAddr = format!("{}:{}", host, port)
         .parse()
-        .expect("Invalid host/port configuration");
+        .unwrap_or_else(|_| {
+            tracing::error!("Invalid host/port configuration: {}:{}", host, port);
+            std::process::exit(1);
+        });
+
+    tracing::info!("Binding to {}:{}", host, port);
 
     tracing::info!("Starting server on {}", addr);
 
@@ -93,6 +100,6 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn hello_handler() -> axum::response::Html<&'static str> {
+async fn health_handler() -> axum::response::Html<&'static str> {
     axum::response::Html("Hello DeepClaude Advanced.")
 }
