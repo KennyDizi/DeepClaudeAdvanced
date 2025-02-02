@@ -11,6 +11,7 @@ services:
       - RUST_LOG=info
     networks:
       - deepclaude_network
+    env_file: .env
 
 networks:
   deepclaude_network:
