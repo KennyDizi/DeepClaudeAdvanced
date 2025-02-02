@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN cargo build --release
 
 # Runtime stage
-FROM debian:bookworm-slim
+FROM debian:bookworm
 
 WORKDIR /usr/local/bin
 
@@ -26,12 +26,8 @@ RUN apt-get update && \
 COPY --from=builder /usr/src/deepclaude/target/release/deepclaude .
 COPY --from=builder /usr/src/deepclaude/config.toml .
 
-# Set the host and port in config
-ENV DEEPCLAUDE_HOST=0.0.0.0
-ENV DEEPCLAUDE_PORT=1337
-
-# Expose port 1337
-EXPOSE 1337
+# Expose port 11434
+EXPOSE 11434
 
 # Run the binary
 CMD ["./deepclaude"]

@@ -98,9 +98,9 @@ fn calculate_deepseek_cost(
     cached_tokens: u32,
     config: &Config,
 ) -> f64 {
-    let cache_hit_cost = (cached_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.input_cache_hit_price;
-    let cache_miss_cost = ((input_tokens - cached_tokens) as f64 / 1_000_000.0) * config.pricing.deepseek.input_cache_miss_price;
-    let output_cost = (output_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.output_price;
+    let cache_hit_cost = (cached_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.deepseek_reasoner.input_cache_hit_price;
+    let cache_miss_cost = ((input_tokens - cached_tokens) as f64 / 1_000_000.0) * config.pricing.deepseek.deepseek_reasoner.input_cache_miss_price;
+    let output_cost = (output_tokens as f64 / 1_000_000.0) * config.pricing.deepseek.deepseek_reasoner.output_price;
 
     cache_hit_cost + cache_miss_cost + output_cost
 }
@@ -128,13 +128,13 @@ fn calculate_anthropic_cost(
     config: &Config,
 ) -> f64 {
     let pricing = if model.contains("claude-3-5-sonnet") {
-        &config.pricing.anthropic.claude_3_sonnet
+        &config.pricing.anthropic.claude_3_5_sonnet
     } else if model.contains("claude-3-5-haiku") {
-        &config.pricing.anthropic.claude_3_haiku
+        &config.pricing.anthropic.claude_3_5_haiku
     } else if model.contains("claude-3-opus") {
         &config.pricing.anthropic.claude_3_opus
     } else {
-        &config.pricing.anthropic.claude_3_sonnet // default to sonnet pricing
+        &config.pricing.anthropic.claude_3_5_sonnet // default to sonnet pricing
     };
 
     let input_cost = (input_tokens as f64 / 1_000_000.0) * pricing.input_price;

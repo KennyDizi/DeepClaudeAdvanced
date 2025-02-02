@@ -99,12 +99,12 @@ pub enum StreamEvent {
     Start {
         created: DateTime<Utc>,
     },
-    
+
     #[serde(rename = "content")]
     Content {
         content: Vec<ContentBlock>,
     },
-    
+
     #[serde(rename = "usage")]
     Usage {
         usage: CombinedUsage,

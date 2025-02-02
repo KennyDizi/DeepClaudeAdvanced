@@ -1,3 +1,13 @@
+## [2025-02-02] [PR#9](https://github.com/KennyDizi/DCA/pull/9)
+
+### Changed
+- Updated server configuration to use port `11434` and host `0.0.0.0`.
+- Renamed pricing models from `claude_3_sonnet` and `claude_3_haiku` to `claude_3_5_sonnet` and `claude_3_5_haiku`.
+- Restructured `DeepSeekPricing` to include `DeepSeekModelPricing` configuration.
+
+### Added
+- Implemented health check API endpoint `/health`.
+
 ## [2025-01-31] [PR#7](https://github.com/KennyDizi/DCA/pull/7)
 
 ### Changed
