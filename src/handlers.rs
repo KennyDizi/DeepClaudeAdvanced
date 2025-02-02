@@ -280,12 +280,12 @@ pub(crate) async fn chat(
     // Combine thinking content with Anthropic's response
     let mut content = Vec::new();
 
-    // Add thinking block first
-    content.push(ContentBlock::text(thinking_content));
-
-    // Add Anthropic's response blocks
+    // Add Anthropic's response blocks first
     content.extend(anthropic_response.content.clone().into_iter()
         .map(ContentBlock::from_anthropic));
+
+    // Then add thinking block
+    content.push(ContentBlock::text(thinking_content));
 
     // Build response with captured headers
     let response = ApiResponse {
