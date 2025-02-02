@@ -240,6 +240,7 @@ pub(crate) async fn chat(
         })?;
 
     let thinking_content = format!("<thinking>\n{}\n</thinking>", reasoning_content);
+    println!("thinking_content: {}", thinking_content);
 
     // Add thinking content to messages for Anthropic
     let mut anthropic_messages = messages;
@@ -325,8 +326,10 @@ pub(crate) async fn chat(
     // Extract assistant response from first content block
     let assistant_content = response.content
         .first()
-        .map(|block| block.text.clone())
+        .map(|block| block.text.trim_start().to_string())
         .unwrap_or_default();
+
+    println!("assistant_content: {}", assistant_content);
 
     // Build OpenAI-compatible response
     Ok(Json(serde_json::json!({
