@@ -204,7 +204,7 @@ pub(crate) async fn chat(
     State(state): State<Arc<AppState>>,
     headers: axum::http::HeaderMap,
     Json(request): Json<ApiRequest>,
-) -> Result<Json<ApiResponse>> {
+) -> Result<Json<serde_json::Value>> {
     // Validate system prompt
     if !request.validate_system_prompt() {
         return Err(ApiError::InvalidSystemPrompt);
@@ -322,7 +322,26 @@ pub(crate) async fn chat(
         },
     };
 
-    Ok(Json(response))
+    // Extract assistant response from first content block
+    let assistant_content = response.content
+        .first()
+        .map(|block| block.text.clone())
+        .unwrap_or_default();
+
+    // Build OpenAI-compatible response
+    Ok(Json(serde_json::json!({
+        "choices": [
+            {
+                "message": {
+                    "role": "assistant",
+                    "content": assistant_content
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "index": 0
+            }
+        ]
+    })))
 }
 
 /// Handler for streaming chat requests.
