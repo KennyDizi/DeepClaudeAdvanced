@@ -37,25 +37,22 @@ pub struct PricingConfig {
     pub anthropic: AnthropicPricing,
 }
 
-/// DeepSeek-specific pricing configuration.
-///
-/// Contains pricing rates for different aspects of DeepSeek API usage,
-/// including cached and non-cached requests.
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DeepSeekPricing {
-    pub input_cache_hit_price: f64,   // per million tokens
-    pub input_cache_miss_price: f64,  // per million tokens
-    pub output_price: f64,            // per million tokens
+    pub deepseek_reasoner: DeepSeekModelPricing,
 }
 
-/// Anthropic-specific pricing configuration.
-///
-/// Contains pricing information for different Claude model variants
-/// and their associated costs.
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct DeepSeekModelPricing {
+    pub input_cache_hit_price: f64,
+    pub input_cache_miss_price: f64,
+    pub output_price: f64,
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct AnthropicPricing {
-    pub claude_3_sonnet: ModelPricing,
-    pub claude_3_haiku: ModelPricing,
+    pub claude_3_5_sonnet: ModelPricing,
+    pub claude_3_5_haiku: ModelPricing,
     pub claude_3_opus: ModelPricing,
 }
 
@@ -106,22 +103,24 @@ impl Default for Config {
         Self {
             server: ServerConfig {
                 host: "127.0.0.1".to_string(),
-                port: 3000,
+                port: 11434,
             },
             pricing: PricingConfig {
                 deepseek: DeepSeekPricing {
-                    input_cache_hit_price: 0.14,
-                    input_cache_miss_price: 0.55,
-                    output_price: 2.19,
+                    deepseek_reasoner: DeepSeekModelPricing {
+                        input_cache_hit_price: 0.14,
+                        input_cache_miss_price: 0.55,
+                        output_price: 2.19,
+                    },
                 },
                 anthropic: AnthropicPricing {
-                    claude_3_sonnet: ModelPricing {
+                    claude_3_5_sonnet: ModelPricing {
                         input_price: 3.0,
                         output_price: 15.0,
                         cache_write_price: 3.75,
                         cache_read_price: 0.30,
                     },
-                    claude_3_haiku: ModelPricing {
+                    claude_3_5_haiku: ModelPricing {
                         input_price: 0.80,
                         output_price: 4.0,
                         cache_write_price: 1.0,

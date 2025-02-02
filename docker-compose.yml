@@ -4,11 +4,14 @@ services:
     container_name: deepclaude_api
     restart: unless-stopped
     ports:
-      - "127.0.0.1:1337:1337"
+      - "11434:11434"
     volumes:
-      - ./config.toml:/usr/local/bin/config.toml
+      - ./config.toml:/usr/local/bin/config.toml:ro
+    environment:
+      - RUST_LOG=info
     networks:
       - deepclaude_network
+    env_file: .env
 
 networks:
   deepclaude_network:
