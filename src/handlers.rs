@@ -205,6 +205,9 @@ pub(crate) async fn chat(
     headers: axum::http::HeaderMap,
     Json(request): Json<ApiRequest>,
 ) -> Result<Json<serde_json::Value>> {
+    // Log new request with formatted datetime
+    println!("New request coming at {}", Utc::now().format("%d:%m:%Y %H:%M:%S"));
+
     // Validate system prompt
     if !request.validate_system_prompt() {
         return Err(ApiError::InvalidSystemPrompt);
