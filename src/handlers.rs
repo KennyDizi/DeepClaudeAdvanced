@@ -333,6 +333,8 @@ pub(crate) async fn chat(
         .unwrap_or_default();
 
     println!("assistant_content: {}", assistant_content);
+    println!("deepseek_cost: ${:.3}", deepseek_cost);
+    println!("anthropic_cost: ${:.3}", anthropic_cost);
 
     // Build OpenAI-compatible response
     Ok(Json(serde_json::json!({

@@ -1,3 +1,14 @@
+## [2025-02-03] [PR#13](https://github.com/KennyDizi/DCA/pull/13)
+
+### Added
+- Added `extra_fields` to handle unexpected JSON fields in API responses.
+- Introduced `ResponseParse` error type with raw response details.
+- Added cost logging for `deepseek` and `anthropic` API calls.
+
+### Changed
+- Enhanced error handling for API response parsing and HTTP status codes.
+- Improved error response formats and messages.
+
 ## [2025-02-03] [PR#11](https://github.com/KennyDizi/DCA/pull/11)
 
 ### Changed
