@@ -204,7 +204,10 @@ pub(crate) async fn chat(
     State(state): State<Arc<AppState>>,
     headers: axum::http::HeaderMap,
     Json(request): Json<ApiRequest>,
-) -> Result<Json<ApiResponse>> {
+) -> Result<Json<serde_json::Value>> {
+    // Log new request with formatted datetime
+    println!("New request coming at {}", Utc::now().format("%d:%m:%Y %H:%M:%S"));
+
     // Validate system prompt
     if !request.validate_system_prompt() {
         return Err(ApiError::InvalidSystemPrompt);
@@ -240,6 +243,7 @@ pub(crate) async fn chat(
         })?;
 
     let thinking_content = format!("<thinking>\n{}\n</thinking>", reasoning_content);
+    println!("thinking_content: {}", thinking_content);
 
     // Add thinking content to messages for Anthropic
     let mut anthropic_messages = messages;
@@ -280,12 +284,12 @@ pub(crate) async fn chat(
     // Combine thinking content with Anthropic's response
     let mut content = Vec::new();
 
-    // Add thinking block first
-    content.push(ContentBlock::text(thinking_content));
-
-    // Add Anthropic's response blocks
+    // Add Anthropic's response blocks first
     content.extend(anthropic_response.content.clone().into_iter()
         .map(ContentBlock::from_anthropic));
+
+    // Then add thinking block
+    content.push(ContentBlock::text(thinking_content));
 
     // Build response with captured headers
     let response = ApiResponse {
@@ -322,7 +326,28 @@ pub(crate) async fn chat(
         },
     };
 
-    Ok(Json(response))
+    // Extract assistant response from first content block
+    let assistant_content = response.content
+        .first()
+        .map(|block| block.text.trim_start().to_string())
+        .unwrap_or_default();
+
+    println!("assistant_content: {}", assistant_content);
+
+    // Build OpenAI-compatible response
+    Ok(Json(serde_json::json!({
+        "choices": [
+            {
+                "message": {
+                    "role": "assistant",
+                    "content": assistant_content
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "index": 0
+            }
+        ]
+    })))
 }
 
 /// Handler for streaming chat requests.

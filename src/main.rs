@@ -24,6 +24,7 @@ use tower_http::{
     trace::TraceLayer,
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use chrono::Utc;
 
 /// Application entry point.
 ///
@@ -101,5 +102,7 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn health_handler() -> axum::response::Html<&'static str> {
+    // Log new request with formatted datetime
+    println!("New request coming at {}", Utc::now().format("%d:%m:%Y %H:%M:%S"));
     axum::response::Html("Hello DeepClaude Advanced.")
 }
