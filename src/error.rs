@@ -88,6 +88,12 @@ pub enum ApiError {
     Other {
         message: String,
     },
+
+    #[error("API response parsing error: {message}")]
+    ResponseParse {
+        message: String,
+        raw_response: String,
+    },
 }
 
 /// Implements conversion of API errors into HTTP responses.
@@ -169,6 +175,17 @@ impl IntoResponse for ApiError {
                     error: ErrorDetails {
                         message: format!("Internal server error: {}", message),
                         type_: "internal_error".to_string(),
+                        param: None,
+                        code: None,
+                    },
+                },
+            ),
+            ApiError::ResponseParse { message, .. } => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                ErrorResponse {
+                    error: ErrorDetails {
+                        message: format!("Response parsing failed: {}", message),
+                        type_: "response_parse_error".to_string(),
                         param: None,
                         code: None,
                     },
