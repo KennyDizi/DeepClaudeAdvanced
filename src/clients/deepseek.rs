@@ -95,6 +95,8 @@ pub struct DeepSeekResponse {
     pub choices: Vec<Choice>,
     pub usage: Usage,
     pub system_fingerprint: String,
+    #[serde(flatten)]
+    pub extra_fields: serde_json::Value,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -148,6 +150,8 @@ pub struct Usage {
     pub completion_tokens_details: CompletionTokensDetails,
     pub prompt_cache_hit_tokens: u32,
     pub prompt_cache_miss_tokens: u32,
+    #[serde(flatten)]
+    pub extra_fields: serde_json::Value,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -298,8 +302,7 @@ impl DeepSeekClient {
         let headers = self.build_headers(Some(&config.headers))?;
         let request = self.build_request(messages, false, config);
 
-        let response = self
-            .client
+        let response = self.client
             .post(DEEPSEEK_API_URL)
             .headers(headers)
             .json(&request)
@@ -312,28 +315,27 @@ impl DeepSeekClient {
                 code: None
             })?;
 
-        if !response.status().is_success() {
-            let error = response
-                .text()
-                .await
-                .unwrap_or_else(|_| "Unknown error".to_string());
+        let status = response.status();
+        let raw_body = response.text().await.map_err(|e| ApiError::DeepSeekError {
+            message: format!("Failed to read response body: {}", e),
+            type_: "io_error".to_string(),
+            param: None,
+            code: None
+        })?;
+
+        if !status.is_success() {
             return Err(ApiError::DeepSeekError {
-                message: error,
-                type_: "api_error".to_string(),
+                message: format!("API returned {}: {}", status, raw_body),
+                type_: "http_error".to_string(),
                 param: None,
-                code: None
+                code: Some(status.to_string()),
             });
         }
 
-        response
-            .json::<DeepSeekResponse>()
-            .await
-            .map_err(|e| ApiError::DeepSeekError {
-                message: format!("Failed to parse response: {}", e),
-                type_: "parse_error".to_string(),
-                param: None,
-                code: None
-            })
+        serde_json::from_str(&raw_body).map_err(|e| ApiError::ResponseParse {
+            message: format!("Failed to parse response: {}", e),
+            raw_response: raw_body,
+        })
     }
 
     /// Sends a streaming chat request to the DeepSeek API.
