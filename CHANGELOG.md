@@ -1,3 +1,13 @@
+## [2025-02-03] [PR#11](https://github.com/KennyDizi/DCA/pull/11)
+
+### Changed
+- Modified chat handler to return OpenAI-compatible JSON response format.
+- Reordered response content blocks to prioritize Anthropic output before reasoning content.
+
+### Added
+- Debug logging for assistant response content and request timestamps.
+- Request logging in health check handler.
+
 ## [2025-02-02] [PR#9](https://github.com/KennyDizi/DCA/pull/9)
 
 ### Changed
