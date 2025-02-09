@@ -8,7 +8,7 @@
 
 Harness the power of DeepSeek R1's reasoning and Claude's creativity and code generation capabilities with a unified API and chat interface.
 
-[![GitHub license](https://img.shields.io/github/license/getasterisk/deepclaude)](https://github.com/getasterisk/deepclaude/blob/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/getasterisk/deepclaude)](https://github.com/KennyDizi/DeepClaudeAdvanced/blob/main/LICENSE.md)
 [![Rust](https://img.shields.io/badge/rust-v1.75%2B-orange)](https://www.rust-lang.org/)
 [![API Status](https://img.shields.io/badge/API-Stable-green)](https://deepclaude.asterisk.so)
 
@@ -91,7 +91,7 @@ According to [Aider Polyglot Benchmarks](https://aider.chat/2025/01/24/r1-sonnet
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/getasterisk/deepclaude.git
+git clone https://github.com/KennyDizi/DeepClaudeAdvanced.git
 cd deepclaude
 ```
 
