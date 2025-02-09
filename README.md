@@ -137,7 +137,7 @@ curl http://localhost:11434/health
 
 Basic API test:
 ```bash
-curl --location 'http://127.0.0.1:11434/chat/completions' \
+curl --location 'http://localhost:11434/chat/completions' \
 --header 'Content-Type: application/json' \
 --data '{
     "messages": [
@@ -163,7 +163,7 @@ API keys can be provided either through:
 import requests
 
 response = requests.post(
-    "http://127.0.0.1:11434/chat/completions",
+    "http://localhost:11434/chat/completions",
     headers={
         "X-DeepSeek-API-Token": "<DEEPSEEK_API_KEY>",  # or set in .env
         "X-Anthropic-API-Token": "<ANTHROPIC_API_KEY>"  # or set in .env
@@ -189,7 +189,7 @@ async def stream_response():
     async with httpx.AsyncClient() as client:
         async with client.stream(
             "POST",
-            "http://127.0.0.1:11434/chat/completions",
+            "http://localhost:11434/chat/completions",
             headers={
                 "X-DeepSeek-API-Token": "<DEEPSEEK_API_KEY>",
                 "X-Anthropic-API-Token": "<ANTHROPIC_API_KEY>"
