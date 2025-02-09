@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>DeepClaude 🐬🧠</h1>
+<h1>DeepClaude 🐬🧠 Inspired by [Asterisk](https://asterisk.so/)</h1>
 
 <img src="assets/deepclaude.png" width="300">
 
@@ -266,16 +266,8 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
-## Acknowledgments
-
-DeepClaude is a free and open-source project by [Asterisk](https://asterisk.so/). Special thanks to:
-
-- DeepSeek for their incredible R1 model
-- Anthropic for Claude's capabilities
-- The open-source community for their continuous support
-
 ---
 
 <div align="center">
-Made with ❤️ by <a href="https://asterisk.so">Asterisk</a>
+This project is inspired by the [original project](https://github.com/getAsterisk/deepclaude)
 </div>
