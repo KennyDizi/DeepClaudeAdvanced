@@ -1,6 +1,8 @@
 <div align="center">
 
-<h1>DeepClaude 🐬🧠 Inspired by [Asterisk](https://asterisk.so/)</h1>
+<h1>DeepClaude 🐬🧠</h1>
+
+**Inspired by [Asterisk](https://asterisk.so/)**
 
 <img src="assets/deepclaude.png" width="300">
 
@@ -268,6 +270,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 
 ---
 
-<div align="center">
-This project is inspired by the [original project](https://github.com/getAsterisk/deepclaude)
-</div>
+**This project is inspired by the [original project](https://github.com/getAsterisk/deepclaude)**
