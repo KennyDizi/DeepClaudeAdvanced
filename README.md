@@ -98,6 +98,11 @@ cd deepclaude
 cargo build --release
 ```
 
+3. Run with Docker:
+```bash
+docker compose -f docker-compose.yml up --build
+```
+
 ### Configuration
 
 Create a `config.toml` file in the project root:
@@ -111,9 +116,44 @@ port = 11434
 # Configure pricing settings for usage tracking
 ```
 
+Create a `.env` file in the project root with your API keys:
+```bash
+DEEPSEEK_API_KEY=your_key_here
+ANTHROPIC_API_KEY=your_key_here
+```
+
 ## API Usage
 
 See [API Docs](https://deepclaude.chat)
+
+### Command Line Examples
+
+Check service health:
+```bash
+curl http://localhost:11434/health
+```
+
+Basic API test:
+```bash
+curl --location 'http://127.0.0.1:11434/chat/completions' \
+--header 'Content-Type: application/json' \
+--data '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "How many '\''r'\''s in the word '\''strawberry'\''? Make the answer concisely."
+        }
+    ]
+}'
+```
+
+API keys can be provided either through:
+- Request headers:
+  - `X-DeepSeek-API-Token`
+  - `X-Anthropic-API-Token`
+- Environment variables in `.env` file:
+  - `DEEPSEEK_API_KEY`
+  - `ANTHROPIC_API_KEY`
 
 ### Basic Example
 
@@ -123,8 +163,8 @@ import requests
 response = requests.post(
     "http://127.0.0.1:11434/chat/completions",
     headers={
-        "X-DeepSeek-API-Token": "<YOUR_DEEPSEEK_API_KEY>",
-        "X-Anthropic-API-Token": "<YOUR_ANTHROPIC_API_KEY>"
+        "X-DeepSeek-API-Token": "<DEEPSEEK_API_KEY>",  # or set in .env
+        "X-Anthropic-API-Token": "<ANTHROPIC_API_KEY>"  # or set in .env
     },
     json={
         "messages": [
@@ -149,8 +189,8 @@ async def stream_response():
             "POST",
             "http://127.0.0.1:11434/chat/completions",
             headers={
-                "X-DeepSeek-API-Token": "<YOUR_DEEPSEEK_API_KEY>",
-                "X-Anthropic-API-Token": "<YOUR_ANTHROPIC_API_KEY>"
+                "X-DeepSeek-API-Token": "<DEEPSEEK_API_KEY>",
+                "X-Anthropic-API-Token": "<ANTHROPIC_API_KEY>"
             },
             json={
                 "stream": True,
